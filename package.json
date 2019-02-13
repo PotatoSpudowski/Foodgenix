@@ -3,7 +3,7 @@
     "composer": "^0.20.6"
   },
   "name": "foodgenix",
-  "version": "0.0.9",
+  "version": "0.0.1",
   "description": "Decentralized PDS ledger",
   "scripts": {
     "prepublish": "mkdirp ./dist && composer archive create --sourceType dir --sourceName . -a ./dist/foodgenix.bna",

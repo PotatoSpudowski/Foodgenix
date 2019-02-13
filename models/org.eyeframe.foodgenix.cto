@@ -241,10 +241,10 @@ transaction submitInboundWeightTally extends transferFood {
   --> Business logisticParty
   --> Business retailer
 
-  o DateTime dateStripped optional
-  o String marks optional
-  o Double bagsExpected optional
-  o Condition condition optional
+  o DateTime dateStripped
+  o String marks
+  o Double bagsExpected
+  o Condition condition
 
 }
 
@@ -288,10 +288,10 @@ event getInboundWeightTally {
   --> Business logisticParty
   --> Business retailer
 
-  o DateTime dateStripped optional
-  o String marks optional
-  o Double bagsExpected optional
-  o Condition condition optional
+  o DateTime dateStripped 
+  o String marks 
+  o Double bagsExpected 
+  o Condition condition 
   o String batchId
 }
 
