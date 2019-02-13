@@ -58,14 +58,14 @@ concept Guardian {
   o String firstNameGuardian
   o String middleNameGuardian optional
   o String lastNameGuardian
-  o String costumerID
+  o String customerID
 }
 
 concept Child {
   o String firstNameChild
   o String middleNameChild optional
   o String lastNameChild
-  o String costumerID
+  o String customerID
 }
 
 concept Address {
@@ -117,9 +117,9 @@ extends Business {
   o String retailerId
 }
 
-participant Costumer identified by costumerID
+participant Customer identified by customerID
 extends Business {
-  o String costumerID
+  o String customerID
   o Name name
   o Guardian guardian1 optional
   o Guardian guardian2 optional
@@ -138,7 +138,7 @@ asset FoodProduct identified by productId {
   o Condition productCondition optional
   o Integer productquantity optional
   o DateTime saleDate optional
-  o String costumerName optional
+  o String customerName optional
 
   --> Food batchId 
   --> Business owner 
@@ -174,7 +174,7 @@ asset Food identified by batchId {
   Retailer related
  */
  o String retailerName optional
- o String CostumerName optional
+ o String CustomerName optional
 
 
 /**
@@ -250,10 +250,10 @@ transaction submitInboundWeightTally extends transferFood {
 
 transaction submitSaleInfo extends saleFoodProduct {
   --> Business retailer
-  --> Business costumer
+  --> Business customer
 
   o DateTime saleDate
-  o String costumerName
+  o String customerName
   o Condition productCondition
   o Integer productquantity
 }
@@ -297,10 +297,10 @@ event getInboundWeightTally {
 
 event getSaleInfo {
   --> Business retailer
-  --> Business costumer
+  --> Business customer
 
   o DateTime saleDate
-  o String costumerName
+  o String customerName
   o Condition productCondition
   o Integer productquantity
   o String batchId
