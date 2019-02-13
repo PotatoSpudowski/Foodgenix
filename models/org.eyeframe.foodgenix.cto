@@ -1,0 +1,312 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+namespace org.eyeframe.foodgenix
+
+/******
+  Foodgenix is a subsidiary of Eyeframe technologies
+
+  github: https://github.com/eyeframe
+
+ ******/
+
+enum  FoodType {
+  o RICE
+  o WHEAT
+  o SUGAR
+}
+
+enum FoodProductType {
+  o RICE
+  o WHEAT
+  o SUGAR
+}
+
+enum Quality {
+  o POOR
+  o SATISFACTORY
+  o GOOD
+}
+
+enum State {
+  o STORED_IN_WAREHOUSES
+  o DAMAGED
+  o READY_FOR_DISTRIBUTION
+  o DISTRIBUTED
+  o READY_FOR_SALE
+  o SOLD
+}
+
+concept Name {
+  o String firstName
+  o String middleName optional
+  o String lastName
+}
+
+concept Guardian {
+  o String firstNameGuardian
+  o String middleNameGuardian optional
+  o String lastNameGuardian
+  o String costumerID
+}
+
+concept Child {
+  o String firstNameChild
+  o String middleNameChild optional
+  o String lastNameChild
+  o String costumerID
+}
+
+concept Address {
+  o String country 
+  o String state
+  o String district
+  o String city
+  o String street optional
+  o String landmark optional
+  o String zip 
+}
+
+concept  Condition {
+  o Boolean condensation optional
+  o Boolean holeInContainer
+  o Boolean insectActivity optional
+  o Double co2Level optional
+}
+
+/**
+participants in the network ^-^
+ */
+
+abstract participant Business {
+  o String organization
+  o Address address
+}
+
+participant Regulator identified by regulatorId
+extends Business{
+  o String regulatorId
+}
+
+participant Warehouse identified by warehouseId extends Business {
+  o String warehouseId
+  o Boolean isSilo
+  o Boolean isPrivateWarehouse
+  o Boolean hasLogisticsFacilities optional
+}
+
+participant LogisticParty identified by LogisticsId
+extends Business{
+  o String LogisticsId
+  o Boolean isPartOfWarehouseCompany optional
+}
+
+participant Retailer identified by retailerId
+extends Business {
+  o String retailerId
+}
+
+participant Costumer identified by costumerID
+extends Business {
+  o String costumerID
+  o Name name
+  o Guardian guardian1 optional
+  o Guardian guardian2 optional
+  o Child child1 optional
+  o Child child2 optional
+  o Child child3 optional
+  o String phoneNo
+}
+
+/**
+ Assets in the network
+ */
+asset FoodProduct identified by productId {
+  o FoodProductType foodProductType 
+  o String productId 
+  o Condition productCondition optional
+  o Integer productquantity optional
+  o DateTime saleDate optional
+  o String costumerName optional
+
+  --> Food batchId 
+  --> Business owner 
+}
+
+asset Food identified by batchId {
+/**
+  Main attributes
+ */
+  o String batchId
+  o FoodType type
+  o Quality quality 
+  o State batchState
+
+/**
+  Warehouse related attributes
+ */
+ o DateTime arrival optional
+ o String warehouseName optional
+ o String querryType optional
+ o DateTime departure optional
+ o String totalOutboundweight optional
+ o Condition storageCondition optional
+
+/**
+  Logistics related
+ */
+ o DateTime outForShipping optional
+ o String LogisticsCompanyName optional
+ o String LogisticsContainerNo optional
+
+/**
+  Retailer related
+ */
+ o String retailerName optional
+ o String CostumerName optional
+
+
+/**
+  weight tally details
+ */
+  o DateTime dateStripped optional
+  o String marks optional
+  o Double bagsExpected optional
+  o Condition condition optional
+
+  --> Business owner
+}
+
+/**
+  Transactions 
+ */
+
+transaction addFood {
+  o String batchId
+  o FoodType type 
+  o Quality quality
+  o State batchState
+  --> Warehouse warehouse
+}
+
+transaction addFoodProduct {
+  o FoodProductType foodProductType 
+  o String productId
+  o Condition productCondition optional
+  o Integer productquantity optional
+  --> Food batchId
+  --> Business owner
+}
+
+abstract transaction transferFood {
+  o String batchId
+}
+
+abstract transaction saleFoodProduct {
+  o String batchId
+  o String productId
+}
+
+transaction submitStorageDetails extends transferFood {
+  --> Business warehouse
+  o DateTime arrival optional
+  o String warehouseName optional
+  o String querryType optional
+  o DateTime departure optional
+  o Condition storageCondition
+  o Double totalOutboundweight optional 
+}
+
+transaction submitLogisticsDetails extends transferFood {
+  --> Business warehouse
+  --> Business logisticParty
+
+  o DateTime outForShipping
+  o String LogisticsCompanyName optional
+  o String LogisticsContainerNo 
+}
+
+transaction submitInboundWeightTally extends transferFood {
+  --> Business logisticParty
+  --> Business retailer
+
+  o DateTime dateStripped optional
+  o String marks optional
+  o Double bagsExpected optional
+  o Condition condition optional
+
+}
+
+transaction submitSaleInfo extends saleFoodProduct {
+  --> Business retailer
+  --> Business costumer
+
+  o DateTime saleDate
+  o String costumerName
+  o Condition productCondition
+  o Integer productquantity
+}
+
+
+/**
+  Events
+ */
+
+event getStorageDetails {
+  --> Business warehouse
+  o DateTime arrival optional
+  o String warehouseName optional
+  o String querryType optional
+  o DateTime departure optional
+  o Condition storageCondition
+  o Double totalOutboundweight optional 
+  o String batchId
+}
+
+event getLogisticsDetails {
+  --> Business warehouse
+  --> Business logisticParty
+
+  o DateTime outForShipping
+  o String LogisticsCompanyName optional
+  o String LogisticsContainerNo
+  o String batchId
+}
+
+event getInboundWeightTally {
+  --> Business logisticParty
+  --> Business retailer
+
+  o DateTime dateStripped optional
+  o String marks optional
+  o Double bagsExpected optional
+  o Condition condition optional
+  o String batchId
+}
+
+event getSaleInfo {
+  --> Business retailer
+  --> Business costumer
+
+  o DateTime saleDate
+  o String costumerName
+  o Condition productCondition
+  o Integer productquantity
+  o String batchId
+  o String productId 
+}
+
+
+
+

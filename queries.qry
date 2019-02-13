@@ -1,0 +1,25 @@
+/**
+  Query file
+*/
+
+query queryFood {
+  description: "get history on a particular Food Batch of food identified by batchID"
+  statement: 
+    SELECT org.eyeframe.foodgenix.Food
+      WHERE (batchId == _$batchId)
+}
+
+query getBatchHistory {
+  description: "See all of the participants that have been involved with a particular batch"
+  statement:
+    SELECT org.eyeframe.foodgenix.transferFood
+      WHERE (batchId == _$batchId)
+}
+
+query getFoodproductData {
+  description: "See all the participants that have been involved with a particular batch"
+  statement:
+    SELECT org.eyeframe.foodgenix.FoodProduct
+      WHERE (productId == _$productId )
+}
+
