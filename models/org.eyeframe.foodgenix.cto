@@ -90,6 +90,7 @@ participants in the network ^-^
  */
 
 abstract participant Business {
+  o String password
   o String organization
   o Address address
 }
