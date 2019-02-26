@@ -183,7 +183,7 @@ asset Food identified by batchId {
  */
   o DateTime dateStripped optional
   o String marks optional
-  o Double bagsExpected optional
+  o String bagsExpected optional
   o Condition condition optional
 
   --> Business owner
@@ -226,7 +226,7 @@ transaction submitStorageDetails extends transferFood {
   o String querryType optional
   o DateTime departure optional
   o Condition storageCondition
-  o Double totalOutboundweight optional 
+  o String totalOutboundweight optional 
 }
 
 transaction submitLogisticsDetails extends transferFood {
@@ -244,7 +244,7 @@ transaction submitInboundWeightTally extends transferFood {
 
   o DateTime dateStripped
   o String marks
-  o Double bagsExpected
+  o String bagsExpected
   o Condition condition
 
 }
@@ -271,7 +271,7 @@ event getStorageDetails {
   o String querryType optional
   o DateTime departure optional
   o Condition storageCondition
-  o Double totalOutboundweight optional 
+  o String totalOutboundweight optional 
   o String batchId
 }
 
@@ -291,7 +291,7 @@ event getInboundWeightTally {
 
   o DateTime dateStripped 
   o String marks 
-  o Double bagsExpected 
+  o String bagsExpected 
   o Condition condition 
   o String batchId
 }
