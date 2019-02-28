@@ -176,6 +176,8 @@ asset Food identified by batchId {
  */
  o String retailerName optional
  o String CustomerName optional
+ o DateTime ShipmentDeliveryDate optional
+ o String ReasonForShipmentDelay optional
 
 
 /**
